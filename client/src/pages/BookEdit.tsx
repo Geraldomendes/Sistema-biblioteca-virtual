@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { api } from '../../api'; // Requisição para o backend
+import { api } from '../../api';
 
 interface LivroFormData {
     titulo: string;
@@ -12,7 +12,7 @@ interface LivroFormData {
 }
 
 export function EditarLivro() {
-    const { id } = useParams<{ id: string }>(); // Captura o ID do livro a partir da URL
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm<LivroFormData>();
     const [loading, setLoading] = useState(true);
@@ -43,9 +43,9 @@ export function EditarLivro() {
 
     const onSubmit = async (data: LivroFormData) => {
         try {
-            await api.put(`/livros/${id}`, data); // Atualiza o livro no backend
+            await api.put(`/livros/${id}`, data);
             alert('Livro atualizado com sucesso!');
-            navigate('/livros'); // Redireciona para a página de livros
+            navigate('/livros');
         } catch (error) {
             console.error('Erro ao atualizar o livro:', error);
             alert('Erro ao atualizar o livro. Tente novamente.');

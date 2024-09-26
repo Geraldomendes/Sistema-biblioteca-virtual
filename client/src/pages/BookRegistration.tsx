@@ -1,13 +1,13 @@
 import { useForm } from 'react-hook-form';
-import { api } from '../../api'; // Requisição para o backend
+import { api } from '../../api';
 import { Sidebar } from '@/components/Sidebar';
 
 interface LivroFormData {
-    titulo: string;
-    autor: string;
-    ano: number;
-    editora: string;
-    categoria: string;
+    title: string;
+    author: string;
+    year: number;
+    editor: string;
+    category: string;
 }
 
 export function BookRegistration() {
@@ -15,8 +15,9 @@ export function BookRegistration() {
 
     const onSubmit = async (data: LivroFormData) => {
         try {
-            // Envia os dados para o backend
-            await api.post('/livros', data);
+
+            console.log(data)
+            await api.post('/books', data);
             alert('Livro cadastrado com sucesso!');
             reset(); // Reseta os campos do formulário após o cadastro
         } catch (error) {
@@ -27,9 +28,9 @@ export function BookRegistration() {
 
     return (
         <div className="flex">
-            {/* Sidebar na lateral esquerda */}
+
             <Sidebar />
-            <div className="max-w-lg mx-auto p-8 bg-white rounded shadow-md">
+            <div className="w-full mx-auto p-8 m-14 bg-white rounded shadow-md">
                 <h1 className="text-2xl font-bold text-gray-700 mb-6">Cadastro de Livro</h1>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -41,10 +42,10 @@ export function BookRegistration() {
                         <input
                             id="titulo"
                             type="text"
-                            {...register('titulo', { required: 'O título é obrigatório' })}
+                            {...register('title', { required: 'O título é obrigatório' })}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
                         />
-                        {errors.titulo && <p className="text-red-500 text-sm">{errors.titulo.message}</p>}
+                        {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
                     </div>
 
                     {/* Campo Autor */}
@@ -55,10 +56,10 @@ export function BookRegistration() {
                         <input
                             id="autor"
                             type="text"
-                            {...register('autor', { required: 'O autor é obrigatório' })}
+                            {...register('author', { required: 'O autor é obrigatório' })}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
                         />
-                        {errors.autor && <p className="text-red-500 text-sm">{errors.autor.message}</p>}
+                        {errors.author && <p className="text-red-500 text-sm">{errors.author.message}</p>}
                     </div>
 
                     {/* Campo Ano */}
@@ -69,10 +70,10 @@ export function BookRegistration() {
                         <input
                             id="ano"
                             type="number"
-                            {...register('ano', { required: 'O ano é obrigatório', min: 0 })}
+                            {...register('year', { required: 'O ano é obrigatório', min: 0 })}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
                         />
-                        {errors.ano && <p className="text-red-500 text-sm">{errors.ano.message}</p>}
+                        {errors.year && <p className="text-red-500 text-sm">{errors.year.message}</p>}
                     </div>
 
                     {/* Campo Editora */}
@@ -83,10 +84,10 @@ export function BookRegistration() {
                         <input
                             id="editora"
                             type="text"
-                            {...register('editora', { required: 'A editora é obrigatória' })}
+                            {...register('editor', { required: 'A editora é obrigatória' })}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
                         />
-                        {errors.editora && <p className="text-red-500 text-sm">{errors.editora.message}</p>}
+                        {errors.editor && <p className="text-red-500 text-sm">{errors.editor.message}</p>}
                     </div>
 
                     {/* Campo Categoria */}
@@ -97,10 +98,10 @@ export function BookRegistration() {
                         <input
                             id="categoria"
                             type="text"
-                            {...register('categoria', { required: 'A categoria é obrigatória' })}
+                            {...register('category', { required: 'A categoria é obrigatória' })}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
                         />
-                        {errors.categoria && <p className="text-red-500 text-sm">{errors.categoria.message}</p>}
+                        {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
                     </div>
 
                     <button

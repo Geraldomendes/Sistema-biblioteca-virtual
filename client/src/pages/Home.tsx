@@ -1,11 +1,11 @@
-import { FaUser, FaBook, FaClipboardList } from 'react-icons/fa'; // Ícones da biblioteca react-icons
+import { FaUser, FaBook, FaClipboardList } from 'react-icons/fa';
 import { Sidebar } from '@/components/Sidebar';
-import { Link } from 'react-router-dom'; // Importação do Link para navegação
+import { Link } from 'react-router-dom';
 
 export function Home() {
   return (
     <div className="flex">
-      {/* Sidebar na lateral esquerda */}
+
       <Sidebar />
 
       {/* Conteúdo principal */}
@@ -50,11 +50,10 @@ export function Home() {
             <FaClipboardList className="text-green-600 text-5xl" />
             <div>
               <h3 className="text-xl font-semibold text-gray-700">
-                Realizar empréstimos
+                Conferir empréstimos
               </h3>
               <p className="text-gray-500">
-                Faça o empréstimo dos livros desejados e depois apenas compareça à
-                biblioteca da instituição para fazer a retirada.
+                Confira os seus empréstimos realizados.
               </p>
             </div>
           </Link>

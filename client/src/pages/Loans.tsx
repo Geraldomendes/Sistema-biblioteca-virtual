@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Book } from '../components/Book'; // Componente de livro
-import { api } from '../../api'; // Requisição para buscar os livros emprestados
+import { Book } from '../components/Book';
+import { api } from '../../api';
 import { Sidebar } from '@/components/Sidebar';
 import { LivroData } from './Books';
 import { format } from 'date-fns';
@@ -14,22 +14,22 @@ interface EmprestimoData {
 
 export function Loans() {
     const [emprestimos, setEmprestimos] = useState<EmprestimoData[]>([]);
-    const [loading, setLoading] = useState(true); // Controle de carregamento
-    const [error, setError] = useState(false); // Controle de erro
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         async function fetchLivrosEmprestados() {
             try {
-                const response = await api.get('/lendings'); // Ajuste conforme sua API
+                const response = await api.get('/lendings');
                 if (response.data.length === 0) {
-                    setError(true); // Caso não haja empréstimos
+                    setError(true);
                 } else {
                     setEmprestimos(response.data.lends);
                 }
             } catch (error) {
-                setError(true); // Caso ocorra um erro ao buscar os empréstimos
+                setError(true);
             } finally {
-                setLoading(false); // Finaliza o estado de carregamento
+                setLoading(false);
             }
         }
 

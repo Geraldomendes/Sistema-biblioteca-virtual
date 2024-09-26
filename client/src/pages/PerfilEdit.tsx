@@ -21,7 +21,7 @@ export function EditarPerfil() {
     useEffect(() => {
         async function fetchUserData() {
             try {
-                const response = await api.get('/usuario'); // Supondo que a API retorne os dados do usuário autenticado
+                const response = await api.get('/usuario');
                 const userData = response.data as UserProfileFormData;
 
                 setValue('nome', userData.nome);
