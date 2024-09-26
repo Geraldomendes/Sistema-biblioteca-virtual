@@ -4,6 +4,7 @@ import { prisma } from "../lib/prisma";
 export class LendBookController {
   async lendBook(req: Request, res: Response) {
     const { bookId, userId } = req.body;
+    console.log(bookId, userId)
 
     const book = await prisma.book.findUnique({
       where: { id: bookId },
@@ -61,6 +62,9 @@ export class LendBookController {
   async getLendsByUser(req: Request, res: Response) {
     const lends = await prisma.lendBook.findMany({
       where: { userId: req.userId },
+      include: {
+        book: true
+      }
     });
 
     return res.json({ lends });

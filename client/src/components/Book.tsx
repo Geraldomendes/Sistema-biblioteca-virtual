@@ -1,38 +1,44 @@
-import { Button } from '@/components/Button'; // Componente de botão que você já criou
+import { Button } from '@/components/Button';
 
-interface LivroProps {
-    titulo: string;
-    autor: string;
-    ano: number;
-    editora: string;
-    categoria: string;
-    onEmprestimo?: () => void; // Função opcional para o botão de empréstimo
-    exibirBotao?: boolean; // Controla se o botão de empréstimo será exibido
+interface BookProps {
+    id: string
+    title: string;
+    author: string;
+    year: number;
+    editor: string;
+    category: string;
+    onEmprestimo: (id: string) => void;
+    exibirBotao?: boolean;
 }
 
 export function Book({
-    titulo,
-    autor,
-    ano,
-    editora,
-    categoria,
+    id,
+    title,
+    author,
+    year,
+    editor,
+    category,
     onEmprestimo,
     exibirBotao = true, // Por padrão, exibe o botão de empréstimo
-}: LivroProps) {
+}: BookProps) {
     return (
-        <div className="bg-white shadow-lg p-6 rounded-lg flex flex-col gap-4 mb-6">
-            <div>
-                <h3 className="text-xl font-semibold text-gray-800">{titulo}</h3>
-                <p className="text-gray-600">Autor: {autor}</p>
-                <p className="text-gray-600">Ano: {ano}</p>
-                <p className="text-gray-600">Editora: {editora}</p>
-                <p className="text-gray-600">Categoria: {categoria}</p>
+        <div className="bg-white shadow-lg p-4 rounded-lg flex items-center justify-between mb-8 w-full">
+            {/* Informações do livro em linha */}
+            <div className="flex gap-8">
+                <span className="font-semibold text-lg text-gray-800">Titulo: {title}</span>
+                <span className="text-gray-600">Autor: {author}</span>
+                <span className="text-gray-600">Ano: {year}</span>
+                <span className="text-gray-600">Editora: {editor}</span>
+                <span className="text-gray-600">Categoria: {category}</span>
             </div>
 
+            {/* Botão de Empréstimo (se exibirBotao for true) */}
             {exibirBotao && (
-                <Button onClick={onEmprestimo} className="self-end">
-                    Realizar Empréstimo
-                </Button>
+                <div className='m-4'>
+                    <Button onClick={() => onEmprestimo(id)}>
+                        Realizar Empréstimo
+                    </Button>
+                </div>
             )}
         </div>
     );

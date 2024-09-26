@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api';
+import { Sidebar } from '@/components/Sidebar';
+import { Button } from '@/components/Button';
 
 interface UserProfile {
-    nome: string;
-    matricula: string;
+    name: string;
+    registration: string;
     email: string;
-    telefone: string;
-    curso: string;
-    categoria: string;
+    phone: string;
+    category: string;
 }
 
 export function Perfil() {
@@ -20,8 +21,10 @@ export function Perfil() {
     useEffect(() => {
         async function fetchUserData() {
             try {
-                const response = await api.get('/usuario'); // Supondo que a API retorne os dados do usuário autenticado
-                setUserData(response.data as UserProfile);
+                const response = await api.get('/user'); // Chamada para buscar dados do usuário autenticado
+                console.log(response.data.user)
+                setUserData(response.data.user as UserProfile);
+
             } catch (error) {
                 console.error('Erro ao carregar os dados do usuário:', error);
                 setError(true);
@@ -33,35 +36,37 @@ export function Perfil() {
         fetchUserData();
     }, []);
 
-    if (loading) {
-        return <p>Carregando dados...</p>;
-    }
-
-    if (error) {
-        return <p className="text-red-500">Erro ao carregar os dados do usuário. Tente novamente mais tarde.</p>;
-    }
-
     return (
-        <div className="max-w-lg mx-auto p-8 bg-white rounded shadow-md">
-            <h1 className="text-2xl font-bold text-gray-700 mb-6">Perfil</h1>
+        <div className="flex h-screen">
+            <Sidebar />
 
-            {userData && (
-                <div className="space-y-4">
-                    <p><strong>Nome:</strong> {userData.nome}</p>
-                    <p><strong>Matrícula:</strong> {userData.matricula}</p>
-                    <p><strong>E-mail:</strong> {userData.email}</p>
-                    <p><strong>Telefone:</strong> {userData.telefone}</p>
-                    <p><strong>Curso:</strong> {userData.curso}</p>
-                    <p><strong>Categoria:</strong> {userData.categoria}</p>
+            <div className="flex-1 flex items-center justify-center gap-8 bg-gray-100">
+                {loading ? (
+                    <p>Carregando dados...</p>
+                ) : error || !userData ? (
+                    <p className="text-red-500 text-3xl font-semibold">Usuário não encontrado</p>
+                ) : (
+                    <div className="max-w-3xl w-full p-12 gap-10 bg-white rounded-lg shadow-lg text-gray-700">
+                        <h1 className="text-4xl font-bold mb-8 text-center">Perfil</h1>
 
-                    <button
-                        onClick={() => navigate('/editar-perfil')}
-                        className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-500 transition"
-                    >
-                        Editar Cadastro
-                    </button>
-                </div>
-            )}
+                        <div className="grid grid-cols-1 gap-10 text-xl">
+                            <p><strong>Nome:</strong> {userData.name}</p>
+                            <p><strong>Matrícula:</strong> {userData.registration}</p>
+                            <p><strong>E-mail:</strong> {userData.email}</p>
+                            <p><strong>Telefone:</strong> {userData.phone}</p>
+                            <p><strong>Categoria:</strong> {userData.category}</p>
+                        </div>
+
+                        <div className="flex justify-center mt-8">
+                            <Button
+                                onClick={() => navigate('/editar-perfil')}
+                            >
+                                Editar Cadastro
+                            </Button>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

@@ -1,12 +1,16 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import React from 'react'
 
 import { api } from "../api/index";
 
+type User = {
+    id: string;
+}
+
 interface IContext {
     tokenState: string | null;
-    userId: string | null;
-    login: (email: string, password: string) => Promise<void>;
+    userId: string;
+    login: (registration: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
 }
 
@@ -18,21 +22,24 @@ interface AuthProviderContextProps {
 
 export function AuthProviderContext({ children }: AuthProviderContextProps) {
     const [tokenState, setTokenState] = useState<string | null>(null);
-    const [userId, setUserId] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string>("");
 
-    async function login(username: string, password: string) {
+    async function login(registration: string, password: string) {
         const dados = {
-            email: username,
-            senha: password,
+            registration: registration,
+            password: password,
         };
         try {
-            const response = await api.post("/usuarios/login", dados);
-            const { token, userId } = response.data as { token: string; userId: string; };
+
+            const response = await api.post("/signin", dados);
+
+            const { token, user } = response.data as { token: string; user: User; };
+
             api.defaults.headers.common.Authorization = `Bearer ${token}`;
 
             localStorage.setItem('token', token);
             setTokenState(token);
-            setUserId(userId);
+            setUserId(user.id);
         } catch (error) {
             console.log("Error aqui", error);
         }
@@ -40,7 +47,7 @@ export function AuthProviderContext({ children }: AuthProviderContextProps) {
 
     async function logout() {
         setTokenState(null);
-        setUserId(null);
+        setUserId("");
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
 
@@ -62,5 +69,10 @@ export function AuthProviderContext({ children }: AuthProviderContextProps) {
             {children}
         </AuthContext.Provider>
     );
+}
+export function useAuth() {
+    const contexto = useContext(AuthContext);
+
+    return contexto;
 }
 

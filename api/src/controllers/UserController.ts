@@ -8,11 +8,11 @@ import { prisma } from '../lib/prisma';
 
 export class UserController {
   async signin(req: Request, res: Response) {
-    const email = req.body.email as string;
+    const registration = req.body.registration as string;
     const password = req.body.password as string;
 
     const user = await prisma.user.findFirst({
-      where: { email: { equals: email.toLowerCase() } },
+      where: { registration: { equals: registration.toLowerCase() } },
     });
 
     if (!user) {
@@ -36,8 +36,6 @@ export class UserController {
         email: user.email,
         name: user.name,
         phone: user.phone,
-        imageUrl: user.imageUrl,
-        course: user.course,
         registration: user.registration,
         category: user.category,
         createdAt: user.createdAt,
@@ -91,8 +89,6 @@ export class UserController {
         email: user.email,
         name: user.name,
         phone: user.phone,
-        imageUrl: user.imageUrl,
-        course: user.course,
         registration: user.registration,
         category: user.category,
         createdAt: user.createdAt,

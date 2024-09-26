@@ -10,8 +10,10 @@ export const userAuth = async (
   next: NextFunction
 ) => {
   const token = req.headers.authorization?.split(' ')[1] as string;
+
   try {
     jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+
       if (err) {
         throw new Error('Unauthorized');
       }

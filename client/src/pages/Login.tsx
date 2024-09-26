@@ -2,9 +2,12 @@ import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import ifpbLogo from '../assets/ifpb.svg';
+
+
+import { useAuth } from '../../context/index';
 
 const loginSchema = z.object({
   registration: z
@@ -17,6 +20,9 @@ const loginSchema = z.object({
 export type ILogin = z.infer<typeof loginSchema>;
 
 export function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -25,10 +31,16 @@ export function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  function handleLogin(data: ILogin) {
+  async function handleLogin(data: ILogin) {
     console.log(data);
+    try {
+      await login(data.password, data.registration); // Chamando a função de login
+      navigate('/home'); // Redirecionando para a página Home após o login
+    } catch (error) {
+      console.error('Erro ao realizar login', error);
+    }
   }
-  
+
   return (
     <main className="bg-slate-100 h-screen w-screen flex items-center justify-center gap-20">
       <img src={ifpbLogo} alt="IFPB" width={260} />

@@ -5,8 +5,13 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { z } from 'zod';
 import ifpbLogo from '../assets/ifpb.svg';
+import { api } from '../../api';
+import { useNavigate } from 'react-router-dom';
 
 const signupSchema = z.object({
+  category: z
+    .string({ required_error: 'A categoria não pode estar vazia' })
+    .min(3, 'A categoria deve ter pelo menos 3 letras'),
   name: z
     .string({ required_error: 'O nome não pode estar vazio' })
     .min(3, 'O nome deve ter pelo menos 3 letras'),
@@ -27,17 +32,30 @@ const signupSchema = z.object({
 export type ILogin = z.infer<typeof signupSchema>;
 
 export function Signup() {
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm<ILogin>({
-      resolver: zodResolver(signupSchema),
-    });
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILogin>({
+    resolver: zodResolver(signupSchema),
+  });
 
-    function handleSignup(data: ILogin) {
-      console.log(data);
+  async function handleSignup(data: ILogin) {
+    console.log(data);
+    try {
+      // Envia os dados para a API de cadastro
+      const response = await api.post('/signup', data);
+
+      if (response.status === 201) {
+        alert('Cadastro realizado com sucesso!'); // Alerta de sucesso
+        navigate('/login'); // Redireciona para a página de login
+      }
+    } catch (error) {
+      console.error('Erro ao realizar o cadastro:', error);
+      alert('Erro ao realizar o cadastro. Por favor, tente novamente.');
     }
+  }
 
   return (
     <main className="bg-slate-100 h-screen w-screen flex items-center justify-center gap-20">
@@ -49,6 +67,14 @@ export function Signup() {
         </div>
 
         <div className="w-full max-w-80 gap-5 flex flex-col">
+          <Input
+            {...register('category')}
+            placeholder="Categoria"
+            name="category"
+            error={errors.category?.message}
+            autoComplete="off"
+          />
+
           <Input
             {...register('name')}
             placeholder="Nome"
