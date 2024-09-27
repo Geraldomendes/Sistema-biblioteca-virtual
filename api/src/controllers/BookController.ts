@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 
 export class BookController {
-  fetchBooks = async(req: Request, res: Response) => {
+  fetchBooks = async (req: Request, res: Response) => {
     const books = await prisma.book.findMany();
     return res.json(books);
   }
 
-  getBook = async(req: Request, res: Response) => {
+  getBook = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const book = await prisma.book.findUnique({
@@ -21,7 +21,7 @@ export class BookController {
     return res.json({ book });
   }
 
-  createBook = async(req: Request, res: Response) => {
+  createBook = async (req: Request, res: Response) => {
     const { title, author, year, editor, category } = req.body;
 
     await prisma.book.create({
@@ -37,9 +37,11 @@ export class BookController {
     return res.status(201).json({ message: 'Book created' });
   }
 
-  updateBook = async(req: Request, res: Response) => {
+  updateBook = async (req: Request, res: Response) => {
     const { id } = req.params;
+
     const { title, author, year, editor, category } = req.body;
+    //const yearInt = parseInt(year);
 
     await prisma.book.update({
       where: {
@@ -57,7 +59,7 @@ export class BookController {
     return res.json({ message: 'Book updated' });
   }
 
-  deleteBook = async(req: Request, res: Response) => {
+  deleteBook = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     await prisma.book.delete({

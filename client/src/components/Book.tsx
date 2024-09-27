@@ -1,4 +1,8 @@
 import { Button } from '@/components/Button';
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { Link } from 'react-router-dom';
+
+import { useAuth } from '../../context/index';
 
 interface BookProps {
     id: string
@@ -8,6 +12,7 @@ interface BookProps {
     editor: string;
     category: string;
     onEmprestimo: (id: string) => void;
+    onDelete: (id: string) => void;
     exibirBotao?: boolean;
 }
 
@@ -19,12 +24,14 @@ export function Book({
     editor,
     category,
     onEmprestimo,
+    onDelete,
     exibirBotao = true,
 }: BookProps) {
+    const { category: userCategory } = useAuth();
     return (
-        <div className="bg-white shadow-lg p-4 rounded-lg flex items-center justify-between mb-8 w-full">
+        <div className="bg-white shadow-lg p-4 rounded-lg flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 w-full sm:w-auto sm:h-auto">
 
-            <div className="flex gap-8">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-8">
                 <span className="font-semibold text-lg text-gray-800">Titulo: {title}</span>
                 <span className="text-gray-600">Autor: {author}</span>
                 <span className="text-gray-600">Ano: {year}</span>
@@ -32,14 +39,22 @@ export function Book({
                 <span className="text-gray-600">Categoria: {category}</span>
             </div>
 
-
             {exibirBotao && (
-                <div className='m-4'>
-                    <Button onClick={() => onEmprestimo(id)}>
+                <div className='mt-4 sm:mt-0 sm:ml-4 flex flex-col items-center justify-center'>
+                    {userCategory === "servidor" && (
+                        <div className='flex items-center justify-center'>
+                            <Link to={`/editarlivro/${id}`}>
+                                <FaEdit className="text-green-600 text-4xl"></FaEdit>
+                            </Link>
+                            <FaTrashAlt onClick={() => onDelete(id)} className="text-green-600 text-4xl ml-4"></FaTrashAlt>
+                        </div>
+                    )}
+                    <Button onClick={() => onEmprestimo(id)} >
                         Realizar Empréstimo
                     </Button>
                 </div>
             )}
         </div>
+
     );
 }

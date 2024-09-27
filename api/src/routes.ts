@@ -13,6 +13,8 @@ const lendBookController = new LendBookController();
 router.post('/signup', userController.signup);
 router.post('/signin', userController.signin);
 router.get('/user', userAuth, userController.profile);
+router.put('/user/:id', userAuth, userController.updateProfile);
+router.delete('/user/:id', userAuth, userController.deleteUser);
 
 router.get('/books', userAuth, bookController.fetchBooks);
 router.get('/books/:id', userAuth, bookController.getBook);

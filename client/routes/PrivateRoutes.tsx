@@ -5,6 +5,8 @@ import { Perfil } from '../src/pages/Perfil';
 import { Books } from '../src/pages/Books';
 import { Loans } from '@/pages/Loans';
 import { BookRegistration } from '@/pages/BookRegistration';
+import { PerfilEdit } from "@/pages/PerfilEdit";
+import { BookEdit } from "@/pages/BookEdit";
 
 
 
@@ -18,6 +20,8 @@ export function PrivateRoutes() {
                 <Route path="/livros" element={<Books />} />
                 <Route path="/emprestimos" element={<Loans />} />
                 <Route path="/cadastrarlivro" element={<BookRegistration />} />
+                <Route path="/editarperfil" element={<PerfilEdit />} />
+                <Route path="/editarlivro/:id" element={<BookEdit />} />
             </Routes>
         </BrowserRouter>
     );

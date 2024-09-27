@@ -44,7 +44,7 @@ export class UserController {
   }
 
   async signup(req: Request, res: Response) {
-    const { name, phone, email, registration, password } = req.body;
+    const { category, name, phone, email, registration, password } = req.body;
 
     const user = await prisma.user.findFirst({
       where: {
@@ -63,6 +63,7 @@ export class UserController {
 
     await prisma.user.create({
       data: {
+        category,
         name,
         phone,
         registration,
@@ -94,5 +95,36 @@ export class UserController {
         createdAt: user.createdAt,
       },
     });
+  }
+  async updateProfile(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const { category, name, phone, email, registration } = req.body;
+
+    await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        phone,
+        email,
+        registration,
+        category,
+      },
+    });
+
+    return res.json({ message: 'User updated' });
+  }
+  deleteUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    await prisma.user.delete({
+      where: {
+        id
+      }
+    });
+
+    return res.json({ message: 'User deleted' });
   }
 }

@@ -47,7 +47,7 @@ export function Loans() {
                 {loading ? (
                     <p className="text-xl text-gray-600">Carregando dados...</p>
                 ) : error || emprestimos.length === 0 ? (
-                    <p className="text-red-500 text-3xl font-semibold">Livros não encontrados</p>
+                    <p className="text-red-500 text-3xl font-semibold">Empréstimos não encontrados</p>
                 ) : (
                     <div className="w-full max-w-4xl space-y-6">
                         {emprestimos.map(({ loanDate, returnDate, book: livro }) => (

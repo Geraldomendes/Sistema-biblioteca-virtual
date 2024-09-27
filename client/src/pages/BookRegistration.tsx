@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { api } from '../../api';
 import { Sidebar } from '@/components/Sidebar';
+import { Button } from '@/components/Button';
 
 interface LivroFormData {
     title: string;
@@ -30,7 +31,7 @@ export function BookRegistration() {
         <div className="flex">
 
             <Sidebar />
-            <div className="w-full mx-auto p-8 m-14 bg-white rounded shadow-md">
+            <div className="flex-grow w-full mx-auto p-8 m-14 bg-white rounded shadow-md">
                 <h1 className="text-2xl font-bold text-gray-700 mb-6">Cadastro de Livro</h1>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -104,12 +105,12 @@ export function BookRegistration() {
                         {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
                     </div>
 
-                    <button
+                    <Button
                         type="submit"
-                        className="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-500 transition"
+
                     >
                         Cadastrar Livro
-                    </button>
+                    </Button>
                 </form>
             </div>
         </div>

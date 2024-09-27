@@ -60,11 +60,22 @@ export function Books() {
         ;
     }
 
+    async function handleDelete(livroId: string) {
+        console.log(`Apagando o livro: ${livroId}`);
+        try {
+            const response = await api.delete(`/books/${livroId}`);
+            console.log(response)
+            alert("Livro apagado com sucesso")
+        } catch (error) {
+            console.error('Erro ao fazer emprestimo:', error);
+        }
+    }
+
     return (
         <div className="flex">
 
             <Sidebar />
-            <div className="p-10">
+            <div className=" flex-grow p-10">
                 <h1 className="text-4xl font-semibold text-gray-700 mb-8">Livros Disponíveis</h1>
                 {loading ? (
                     <p>Carregando dados...</p>
@@ -82,6 +93,7 @@ export function Books() {
                                 editor={livro.editor}
                                 category={livro.category}
                                 onEmprestimo={() => handleEmprestimo(livro.id)}
+                                onDelete={() => handleDelete(livro.id)}
                             />
                         ))}
                     </div>

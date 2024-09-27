@@ -7,7 +7,7 @@ import { useAuth } from '../../context/index';
 export function Sidebar() {
     const navigate = useNavigate();
 
-    const { logout } = useAuth();
+    const { logout, category } = useAuth();
 
     const handleLogout = () => {
         try {
@@ -33,8 +33,10 @@ export function Sidebar() {
                 <Button onClick={() => navigate('/home')} >Home</Button>
                 <Button onClick={() => navigate('/perfil')} >Perfil</Button>
                 <Button onClick={() => navigate('/livros')} >Livros</Button>
-                <Button onClick={() => navigate('/emprestimos')} >Empréstimos</Button>
-                <Button onClick={() => navigate('/cadastrarlivro')} >Cadastrar Livro</Button>
+                {category === "aluno" && <Button onClick={() => navigate('/emprestimos')} >Empréstimos</Button>}
+
+                {category === "servidor" && (<Button onClick={() => navigate('/cadastrarlivro')} >Cadastrar Livro</Button>)}
+
                 <Button onClick={() => handleLogout()} >Logout</Button>
             </nav>
         </aside>

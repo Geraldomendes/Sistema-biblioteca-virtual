@@ -67,13 +67,20 @@ export function Signup() {
         </div>
 
         <div className="w-full max-w-80 gap-5 flex flex-col">
-          <Input
+          <select
             {...register('category')}
-            placeholder="Categoria"
             name="category"
-            error={errors.category?.message}
-            autoComplete="off"
-          />
+            className="border border-gray-300 p-2 rounded-lg"
+          >
+            <option value="">Selecione a Categoria</option>
+            <option value="servidor">Servidor</option>
+            <option value="aluno">Aluno</option>
+          </select>
+          {errors.category && (
+            <span className="text-red-500 text-sm">
+              {errors.category.message}
+            </span>
+          )}
 
           <Input
             {...register('name')}

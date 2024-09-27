@@ -5,6 +5,7 @@ import { api } from "../api/index";
 
 type User = {
     id: string;
+    category: string;
 }
 
 interface IContext {
@@ -12,6 +13,7 @@ interface IContext {
     userId: string;
     login: (registration: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
+    category: string;
 }
 
 export const AuthContext = createContext({} as IContext);
@@ -23,6 +25,7 @@ interface AuthProviderContextProps {
 export function AuthProviderContext({ children }: AuthProviderContextProps) {
     const [tokenState, setTokenState] = useState<string | null>(null);
     const [userId, setUserId] = useState<string>("");
+    const [category, setCategory] = useState("");
 
     async function login(registration: string, password: string) {
         const dados = {
@@ -34,12 +37,14 @@ export function AuthProviderContext({ children }: AuthProviderContextProps) {
             const response = await api.post("/signin", dados);
 
             const { token, user } = response.data as { token: string; user: User; };
+            console.log(user)
 
             api.defaults.headers.common.Authorization = `Bearer ${token}`;
 
             localStorage.setItem('token', token);
             setTokenState(token);
             setUserId(user.id);
+            setCategory(user.category);
         } catch (error) {
             console.log("Error aqui", error);
         }
@@ -65,7 +70,7 @@ export function AuthProviderContext({ children }: AuthProviderContextProps) {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ tokenState, userId, login, logout }}>
+        <AuthContext.Provider value={{ tokenState, userId, login, logout, category }}>
             {children}
         </AuthContext.Provider>
     );

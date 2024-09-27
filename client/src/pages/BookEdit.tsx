@@ -2,37 +2,38 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../api';
+import { Sidebar } from '@/components/Sidebar';
+import { Button } from '@/components/Button';
 
 interface LivroFormData {
-    titulo: string;
-    autor: string;
-    ano: number;
-    editora: string;
-    categoria: string;
+    title: string;
+    author: string;
+    year: number;
+    editor: string;
+    category: string;
 }
 
-export function EditarLivro() {
+export function BookEdit() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm<LivroFormData>();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<LivroFormData>();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
 
     useEffect(() => {
         async function fetchLivro() {
             try {
-                const response = await api.get(`/livros/${id}`);
-                const livro = response.data as LivroFormData;
+                const response = await api.get(`/books/${id}`);
+                const livro = response.data.book as LivroFormData;
+                console.log(livro);
 
                 // Preenche o formulário com os dados do livro
-                setValue('titulo', livro.titulo);
-                setValue('autor', livro.autor);
-                setValue('ano', livro.ano);
-                setValue('editora', livro.editora);
-                setValue('categoria', livro.categoria);
+                setValue('title', livro.title);
+                setValue('author', livro.author);
+                setValue('year', livro.year);
+                setValue('editor', livro.editor);
+                setValue('category', livro.category);
             } catch (error) {
                 console.error('Erro ao carregar o livro:', error);
-                setError(true);
             } finally {
                 setLoading(false);
             }
@@ -43,7 +44,7 @@ export function EditarLivro() {
 
     const onSubmit = async (data: LivroFormData) => {
         try {
-            await api.put(`/livros/${id}`, data);
+            await api.put(`/books/${id}`, data);
             alert('Livro atualizado com sucesso!');
             navigate('/livros');
         } catch (error) {
@@ -52,96 +53,96 @@ export function EditarLivro() {
         }
     };
 
-    if (loading) {
-        return <p>Carregando dados do livro...</p>;
-    }
-
-    if (error) {
-        return <p className="text-red-500">Erro ao carregar o livro. Tente novamente mais tarde.</p>;
-    }
-
     return (
-        <div className="max-w-lg mx-auto p-8 bg-white rounded shadow-md">
-            <h1 className="text-2xl font-bold text-gray-700 mb-6">Editar Livro</h1>
+        <div className="flex">
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                {/* Campo Título */}
-                <div>
-                    <label htmlFor="titulo" className="block text-sm font-medium text-gray-700">
-                        Título
-                    </label>
-                    <input
-                        id="titulo"
-                        type="text"
-                        {...register('titulo', { required: 'O título é obrigatório' })}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
-                    />
-                    {errors.titulo && <p className="text-red-500 text-sm">{errors.titulo.message}</p>}
-                </div>
+            <Sidebar />
+            <div className="w-full mx-auto p-8 m-14 bg-white rounded shadow-md">
+                <h1 className="text-2xl font-bold text-gray-700 mb-6">Editar Livro</h1>
+                {loading ? (
+                    <p>Carregando dados...</p>
+                ) : (
 
-                {/* Campo Autor */}
-                <div>
-                    <label htmlFor="autor" className="block text-sm font-medium text-gray-700">
-                        Autor
-                    </label>
-                    <input
-                        id="autor"
-                        type="text"
-                        {...register('autor', { required: 'O autor é obrigatório' })}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
-                    />
-                    {errors.autor && <p className="text-red-500 text-sm">{errors.autor.message}</p>}
-                </div>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        {/* Campo Título */}
+                        <div>
+                            <label htmlFor="titulo" className="block text-sm font-medium text-gray-700">
+                                Título
+                            </label>
+                            <input
+                                id="titulo"
+                                type="text"
+                                {...register('title', { required: 'O título é obrigatório' })}
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
+                            />
+                            {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
+                        </div>
 
-                {/* Campo Ano */}
-                <div>
-                    <label htmlFor="ano" className="block text-sm font-medium text-gray-700">
-                        Ano de Publicação
-                    </label>
-                    <input
-                        id="ano"
-                        type="number"
-                        {...register('ano', { required: 'O ano é obrigatório', min: 0 })}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
-                    />
-                    {errors.ano && <p className="text-red-500 text-sm">{errors.ano.message}</p>}
-                </div>
+                        {/* Campo Autor */}
+                        <div>
+                            <label htmlFor="autor" className="block text-sm font-medium text-gray-700">
+                                Autor
+                            </label>
+                            <input
+                                id="autor"
+                                type="text"
+                                {...register('author', { required: 'O autor é obrigatório' })}
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
+                            />
+                            {errors.author && <p className="text-red-500 text-sm">{errors.author.message}</p>}
+                        </div>
 
-                {/* Campo Editora */}
-                <div>
-                    <label htmlFor="editora" className="block text-sm font-medium text-gray-700">
-                        Editora
-                    </label>
-                    <input
-                        id="editora"
-                        type="text"
-                        {...register('editora', { required: 'A editora é obrigatória' })}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
-                    />
-                    {errors.editora && <p className="text-red-500 text-sm">{errors.editora.message}</p>}
-                </div>
+                        {/* Campo Ano */}
+                        <div>
+                            <label htmlFor="ano" className="block text-sm font-medium text-gray-700">
+                                Ano de Publicação
+                            </label>
+                            <input
+                                id="ano"
+                                type="number"
+                                {...register('year', { required: 'O ano é obrigatório', min: 0 })}
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
+                            />
+                            {errors.year && <p className="text-red-500 text-sm">{errors.year.message}</p>}
+                        </div>
 
-                {/* Campo Categoria */}
-                <div>
-                    <label htmlFor="categoria" className="block text-sm font-medium text-gray-700">
-                        Categoria
-                    </label>
-                    <input
-                        id="categoria"
-                        type="text"
-                        {...register('categoria', { required: 'A categoria é obrigatória' })}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
-                    />
-                    {errors.categoria && <p className="text-red-500 text-sm">{errors.categoria.message}</p>}
-                </div>
+                        {/* Campo Editora */}
+                        <div>
+                            <label htmlFor="editora" className="block text-sm font-medium text-gray-700">
+                                Editora
+                            </label>
+                            <input
+                                id="editora"
+                                type="text"
+                                {...register('editor', { required: 'A editora é obrigatória' })}
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
+                            />
+                            {errors.editor && <p className="text-red-500 text-sm">{errors.editor.message}</p>}
+                        </div>
 
-                <button
-                    type="submit"
-                    className="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-500 transition"
-                >
-                    Atualizar Livro
-                </button>
-            </form>
+                        {/* Campo Categoria */}
+                        <div>
+                            <label htmlFor="categoria" className="block text-sm font-medium text-gray-700">
+                                Categoria
+                            </label>
+                            <input
+                                id="categoria"
+                                type="text"
+                                {...register('category', { required: 'A categoria é obrigatória' })}
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm"
+                            />
+                            {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
+                        </div>
+
+                        <Button
+                            type="submit"
+
+                        >
+                            Atualizar Livro
+                        </Button>
+                    </form>
+
+                )}</div>
         </div>
     );
 }
