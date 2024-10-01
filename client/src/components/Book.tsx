@@ -49,9 +49,11 @@ export function Book({
                             <FaTrashAlt onClick={() => onDelete(id)} className="text-green-600 text-4xl ml-4"></FaTrashAlt>
                         </div>
                     )}
-                    <Button onClick={() => onEmprestimo(id)} >
-                        Realizar Empréstimo
-                    </Button>
+                    {userCategory === "aluno" && (
+                        <Button onClick={() => onEmprestimo(id)} >
+                            Realizar Empréstimo
+                        </Button>
+                    )}
                 </div>
             )}
         </div>
